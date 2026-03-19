@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pree Example</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            width: 100%;
+            height: 100%;
+            background-color: #101410;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #tree {
+            width: 800px;
+            height: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="tree" width="800" height="800"></canvas>
+</body>
+
+<script type="module">
+    import init_pree from "./example/pkg/example.js";
+
+    import {
+        crate_tree,
+        grow_tree,
+        render_tree,
+        is_tree_fully_grown
+    } from "./example/pkg/example.js";
+
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function run() {
+        await init_pree();
+
+        const x = 400;
+        const y = 800;
+
+        const length = 131.0;
+        const angle = -Math.PI / 2;
+
+        const thickness = 10.0;
+        const depth = 7;
+
+        const themes = ["pink", "green", "orange"];
+        const theme = themes[Math.floor(Math.random() * themes.length)];
+
+        const handle = crate_tree("tree", x, y, length, angle, thickness, depth, theme);
+
+        await sleep(666);
+
+        let should_render = true;
+        const d = 1000 / 45;
+
+        const interval_id = setInterval(() => {
+            should_render = !is_tree_fully_grown(handle);
+            if (!should_render) clearInterval(interval_id);
+        }, 1000);
+
+        while (should_render) {
+            await sleep(d);
+
+            grow_tree(handle);
+            render_tree(handle);
+        }
+    }
+
+    run();
+</script>
+
+</html>

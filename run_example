@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+wasm-pack build ./example --release --target web
+python serve_example.py

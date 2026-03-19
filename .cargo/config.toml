@@ -1,0 +1,4 @@
+# rust-analyzer leave me alone
+
+[build]
+target = "wasm32-unknown-unknown"
